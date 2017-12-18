@@ -16,8 +16,8 @@ public class App {
         properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
         properties.put("jboss.naming.client.ejb.context", "true");
         properties.put(Context.PROVIDER_URL, "http-remoting://localhost:8080");
-        properties.put(Context.SECURITY_PRINCIPAL, "<user>");
-        properties.put(Context.SECURITY_CREDENTIALS, "<password>");
+        properties.put(Context.SECURITY_PRINCIPAL, "marcinpastwa");
+        properties.put(Context.SECURITY_CREDENTIALS, "Monmar1104");
         Context context = null;
         try {
             context = new InitialContext(properties);

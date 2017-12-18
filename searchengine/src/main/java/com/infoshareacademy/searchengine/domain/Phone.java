@@ -1,6 +1,8 @@
 package com.infoshareacademy.searchengine.domain;
 
+
 public class Phone {
+
     private Long id;
 
     private String number;
