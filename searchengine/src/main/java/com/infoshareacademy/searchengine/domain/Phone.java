@@ -1,10 +1,14 @@
 package com.infoshareacademy.searchengine.domain;
 
+import javax.persistence.*;
 
+@Entity
 public class Phone {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable=false, unique=true)
     private Long id;
-
+    @Column
     private String number;
 
     public Long getId() {

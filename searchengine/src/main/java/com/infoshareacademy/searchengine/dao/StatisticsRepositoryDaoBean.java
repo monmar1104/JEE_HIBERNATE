@@ -1,27 +1,36 @@
 package com.infoshareacademy.searchengine.dao;
 
+import com.infoshareacademy.searchengine.domain.Statistic;
 import com.infoshareacademy.searchengine.domain.User;
 import com.infoshareacademy.searchengine.repository.StatisticsRepository;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.Map;
 
 @Stateless
 public class StatisticsRepositoryDaoBean implements StatisticsRepositoryDao {
+    @EJB
+    StatisticsRepository statisticsRepository;
     @Override
     public void addVisit(User user) {
-        StatisticsRepository.getRepository().putIfAbsent(user, 0);
-        Integer userStats = getStatisticsByUser(user);
-        StatisticsRepository.getRepository().replace(user, userStats + 1);
+        Map<User, Integer> statisticMap = statisticsRepository.getRepository();
+        if (statisticMap.containsKey(user)){
+            statisticsRepository.updateStatistic(user);
+        }
+        Statistic statistic = new Statistic();
+        statistic.setUser(user);
+        statistic.setCounter(1);
+        statisticsRepository.addVisit(statistic);
     }
 
     @Override
     public Map<User, Integer> getAllStatistics() {
-        return StatisticsRepository.getRepository();
+        return statisticsRepository.getRepository();
     }
 
     @Override
     public Integer getStatisticsByUser(User user) {
-        return StatisticsRepository.getRepository().get(user);
+        return statisticsRepository.getRepository().get(user);
     }
 }

@@ -1,16 +1,31 @@
 package com.infoshareacademy.searchengine.domain;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@NamedQueries({
+        @NamedQuery(name = "selectUserByLogin", query = "from User where login=:login"),
+        @NamedQuery(name = "selectAll", query = "from User ")
+})
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, unique = true)
     private int id;
+    @Column
     private String name;
     private String surname;
     private String login;
     private int age;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "phone_id")
     private List<Phone> phones = new ArrayList<>();
+//    @OneToOne(orphanRemoval = true)
+//    private Statistic statistic;
 
     public String getName() {
         return name;

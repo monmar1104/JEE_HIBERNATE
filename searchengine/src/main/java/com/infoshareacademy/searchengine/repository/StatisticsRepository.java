@@ -1,23 +1,36 @@
 package com.infoshareacademy.searchengine.repository;
 
+import com.infoshareacademy.searchengine.domain.Statistic;
 import com.infoshareacademy.searchengine.domain.User;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Stateless
 public class StatisticsRepository {
-    private static Map<User, Integer> statisticsRepository = new HashMap<>();
+    @PersistenceContext(unitName = "pUnit")
+    EntityManager entityManager;
 
-    public static Map<User, Integer> getRepository() {
-        fillRepositoryWithDefaults();
-        return statisticsRepository;
+    public void addVisit(Statistic statistic){
+        entityManager.persist(statistic);
     }
 
-    private static void fillRepositoryWithDefaults() {
-        List<User> repository = UsersRepository.getRepository();
-        for (User user : repository) {
-            statisticsRepository.putIfAbsent(user, 0);
+    public void updateStatistic(User user){
+        entityManager.createNamedQuery("updateStatistic").setParameter("user",user).executeUpdate();
+    }
+
+    public  Map<User, Integer> getRepository() {
+        List<Statistic> statisticList = entityManager.createNamedQuery("selectAllStatistics").getResultList();
+        Map<User,Integer> statisticsMap=null;
+        for (Statistic s:statisticList){
+            statisticsMap.putIfAbsent(s.getUser(),0);
         }
+        return statisticsMap;
     }
+
+
 }
